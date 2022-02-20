@@ -1,0 +1,16 @@
+name: wids-datathon-2022
+channels:
+  - conda-forge
+dependencies:
+  - python
+  - numpy
+  - pandas
+  - matplotlib
+  - seaborn
+  - scikit-learn
+  - xgboost
+  - ipykernel
+  - pandas-profiling
+  - lightgbm
+  - catboost
+  - yellowbrick
