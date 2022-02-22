@@ -67,6 +67,35 @@ def replace_columns(df, df_imp, columns):
     return df_replaced
 
 
+def impute_and_replace(
+    train_dfs, test_dfs, model, ct, target, feat_names, replace, seed
+):
+    """Iterative impute and replace values for multiple dataframes"""
+    train_dfs_imp = {}
+    test_dfs_imp = {}
+
+    # iterative imputation
+    for (name1, train_df), (name2, test_df) in zip(train_dfs.items(), test_dfs.items()):
+        assert name1 == name2
+        train_imp, test_imp = iterative_impute(
+            train_df, test_df, model, ct, target, feat_names, seed
+        )
+        train_dfs_imp[name1] = train_imp
+        test_dfs_imp[name1] = test_imp
+
+    # replace train columns with missing values
+    for (name1, df), (name2, imp_df) in zip(train_dfs.items(), train_dfs_imp.items()):
+        assert name1 == name2
+        train_dfs[name1] = replace_columns(df, imp_df, replace)
+
+    # replace test columns with missing values
+    for (name1, df), (name2, imp_df) in zip(test_dfs.items(), test_dfs_imp.items()):
+        assert name1 == name2
+        test_dfs[name1] = replace_columns(df, imp_df, replace)
+
+    return train_dfs, test_dfs
+
+
 def split_data(df, column, name):
     """Creates separate dataframes split on a single columns values"""
     dfs = {}
@@ -74,6 +103,17 @@ def split_data(df, column, name):
     for i in np.sort(df[column].unique()):
         split_df = df[df[column] == i]
         dfs[f"{name}_{i}"] = split_df
+
+    return dfs
+
+
+def split_building_data(df, groups):
+    """Creates separate dataframes based on facility type groups"""
+    dfs = {}
+
+    for name, group in groups.items():
+        group_df = df.query("facility_type in @group")
+        dfs[name] = group_df
 
     return dfs
 
