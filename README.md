@@ -4,7 +4,7 @@ This repository contains my source code as it relates to my solution for the 202
 
 For a better viewing experience, I would recommend viewing my notebooks on Kaggle rather than here on GitHub.  You can find the notebooks at the below links:
 
-- Machine learning notebook
+- [Machine learning notebook](https://www.kaggle.com/nicojv/wids-datathon-2022-ensemble-learning-top-10)
 - Exploratory data analysis notebook (link to be included soon, currently cleaning this notebook up)
 
 ## Solution Abstract
